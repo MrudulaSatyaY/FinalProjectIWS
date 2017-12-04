@@ -78,68 +78,46 @@
 		</aside>
 	</div>
 	<script type="text/javascript">
-		var idnum=1;
+		var idnum=1,flag=0;
 		 function bookmark_color()
 		 {
 		 	var x = document.getElementById("bookmark_button");
 		 	x.style.color = 'blue';
+
 		 }
 
 		 function star1_color(ele,num)
 		 {
 		 	var y = document.getElementById(num.id);
 		 	y.style.color = 'gold';
+		 	$.post( "home.php", {star_value: ele, flag : 1});
+		 	
 		 }
 		 function star2_color(ele,num)
 		 {
 		 	var y = document.getElementById(num.id);
 		 	y.style.color = 'gold';
-		 	$.post( "home.php", {star_value: ele });
-
-
+		 	$.post( "home.php", {star_value: ele, flag : 2 });
 		 }
 
-		 function star3_color()
+		 function star3_color(ele,num)
 		 {
-		 	var y = document.getElementById("star1");
+		 	var y = document.getElementById(num.id);
 		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star2");
-		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star3");
-		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star4");
-		 	y.style.color = 'black';
-		 	var y = document.getElementById("star5");
-		 	y.style.color = 'black';
+		 	$.post( "home.php", {star_value: ele, flag : 3 });
 		 }
-		 function star4_color()
+		 function star4_color(ele,num)
 		 {
-		 	var y = document.getElementById("star1");
+		 	var y = document.getElementById(num.id);
 		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star2");
-		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star3");
-		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star4");
-		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star5");
-		 	y.style.color = 'black';
+		 	$.post( "home.php", {star_value: ele, flag : 4});
 		 }
-		 function star5_color()
+		 function star5_color(ele,num)
 		 {
-		 	
-		 	var y = document.getElementById("star5");
+		 	var y = document.getElementById(num.id);
 		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star1");
-		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star2");
-		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star3");
-		 	y.style.color = 'gold';
-		 	var y = document.getElementById("star4");
-		 	y.style.color = 'gold';
+		 	$.post( "home.php", {star_value: ele, flag : 5});
 		 }
-	
 	</script>
 	<?php
 		$count = 0;
@@ -150,24 +128,20 @@
 		}
 		$query_title = "select * from articles";
 		$query_run1 = mysql_query($query_title);
-		if(isset($_POST['star_value'])){
+		if(isset($_POST['star_value'])&&isset($_POST['flag'])){
 			$starVal = $_POST['star_value'];
-			$query_rating = "update articleinfo set rating='".$starVal."'";
+			$flag = $_POST['flag'];
+			$query_rating = "update articleinfo set rating='".$flag."' where articleId='".$starVal."'";
 			$query_run2 = mysql_query($query_rating);
 		}
 	?>
 	<script type="text/javascript">
-		console.log("hi");
 		var count = <?php echo $count ?>;
 		//function for displaying the article
 	 	function displayArticle()
 	 	{
-		 	
 		 	var i;
 		 	<?php 
-		 		
-		 	
-
 		 	while($rows=mysql_fetch_assoc($query_run1))
 		 	{
 		 	?>
@@ -177,7 +151,7 @@
         					echo $rows["title"];
     					
 				
-			?></h4>	<i id="bookmark_button" class="fa fa-bookmark" onclick="bookmark_color()" ></i></div><div class="card-body"><img id="article_image_holder" src="<?php echo $rows['imageUrl'];?>" alt="image unavaliable"></div><hr><div class="card-footer"><div id="rating_stars"><span id="star1'+idnum+'" class="glyphicon glyphicon-star" onclick="star1_color(<?php echo $rows['articleId'];?>,this)"></span><span id="star2" class="glyphicon glyphicon-star" onclick="star2_color(<?php echo $rows['articleId'];?>,this)" ></span><span id="star3" class="glyphicon glyphicon-star" onclick="star3_color()"></span><span id="star4" class="glyphicon glyphicon-star" onclick="star4_color()"></span><span id="star5" class="glyphicon glyphicon-star" onclick="star5_color()"></span></div><ul  id="keyword_list">		    			<li id="keyword1">#</li><li id="keyword2">#</li><li id="keyword3">#</li><li id="keyword4">#</li>		    			<li id="keyword5">#</li></ul></div></div>');
+			?></h4>	<i id="bookmark_button" class="fa fa-bookmark" onclick="bookmark_color()" ></i></div><div class="card-body"><img id="article_image_holder" src="<?php echo $rows['imageUrl'];?>" alt="image unavaliable"></div><hr><div class="card-footer"><div id="rating_stars"><span id="star1'+idnum+'" class="glyphicon glyphicon-star" onclick="star1_color(<?php echo $rows['articleId'];?>,this)"></span><span id="star2'+idnum+'" class="glyphicon glyphicon-star" onclick="star2_color(<?php echo $rows['articleId'];?>,this)" ></span><span id="star3'+idnum+'" class="glyphicon glyphicon-star" onclick="star3_color(<?php echo $rows['articleId'];?>,this)"></span><span id="star4'+idnum+'" class="glyphicon glyphicon-star" onclick="star4_color(<?php echo $rows['articleId'];?>,this)"></span><span id="star5'+idnum+'" class="glyphicon glyphicon-star" onclick="star5_color(<?php echo $rows['articleId'];?>,this)"></span></div><ul  id="keyword_list">		    			<li id="keyword1">#</li><li id="keyword2">#</li><li id="keyword3">#</li><li id="keyword4">#</li>		    			<li id="keyword5">#</li></ul></div></div>');
 			idnum++;
 		 	<?php
 		 	}?>
@@ -185,6 +159,66 @@
 		}
 		displayArticle();
 	</script>
+	<?php
+		function getkeywordidfield() {
+			$keywordvar = $_POST["keyword"];
+			$query_keywordId = "select keywordId from keywords where keyword = '".$keywordvar."'";
+			$query_run3 = mysql_query($query_keywordId);
+			if($res_key = mysql_fetch_array($query_run3)){
+				 return $res_key[0];
+			}
+		}
+		function getarticleidfield() {
+			$keywordId = getkeywordidfield();
+			$query_articleid = "select articleId from articleinfo where keywordId = '".$keywordId."'";
+			$query_run4 = mysql_query($query_articleid);
+			if($res_article = mysql_fetch_array($query_run4)){
+				 return $res_article[0];
+			}
+		}
+	?>
+	<script type="text/javascript">
+
+		 function search(){
+		 <?php
+		 	if(isset($_POST['keyword'])){
+		 		$keyword = $_POST['keyword'];
+		 		$articleid = getarticleidfield();
+		 		if(!empty($_POST['keyword'])){
+		 			if(isset($_POST['sub'])){
+		 				$query_search = "select * from articles where articleId='".$articleid."'";
+		 				$query_runSearch = mysql_query($query_search);
+		 			}
+		 		}
+		 	}
+		 	?>
+		 	displaySearchArticle();
+		}
+	</script>
+	<script type="text/javascript">
+		 function displaySearchArticle()
+	 	{
+
+		 	<?php 
+		 	while($rows1=mysql_fetch_assoc($query_runSearch))
+		 	{
+		 	?>
+		 	
+		 	$('#cardCarrier').append('<div id="card_template" class="card" ><div class="card-header">					<h4 id="art_title" align="left"><?php 
+							
+        					echo $rows1["title"];
+    					
+				
+			?></h4>	<i id="bookmark_button" class="fa fa-bookmark" onclick="bookmark_color()" ></i></div><div class="card-body"><img id="article_image_holder" src="<?php echo $rows1['imageUrl'];?>" alt="image unavaliable"></div><hr><div class="card-footer"><div id="rating_stars"><span id="star1'+idnum+'" class="glyphicon glyphicon-star" onclick="star1_color(<?php echo $rows1['articleId'];?>,this)"></span><span id="star2'+idnum+'" class="glyphicon glyphicon-star" onclick="star2_color(<?php echo $rows1['articleId'];?>,this)" ></span><span id="star3'+idnum+'" class="glyphicon glyphicon-star" onclick="star3_color(<?php echo $rows1['articleId'];?>,this)"></span><span id="star4'+idnum+'" class="glyphicon glyphicon-star" onclick="star4_color(<?php echo $rows1['articleId'];?>,this)"></span><span id="star5'+idnum+'" class="glyphicon glyphicon-star" onclick="star5_color(<?php echo $rows1['articleId'];?>,this)"></span></div><ul  id="keyword_list">		    			<li id="keyword1">#</li><li id="keyword2">#</li><li id="keyword3">#</li><li id="keyword4">#</li>		    			<li id="keyword5">#</li></ul></div></div>');
+			idnum++;
+		 	<?php
+		 	}?>
+
+		}
+
+	</script>
+	
+
 	
 </body>
 </html>
